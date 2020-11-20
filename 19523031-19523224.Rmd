@@ -1,0 +1,48 @@
+---
+title: "K-Means"
+author: "Rio Risqi, Yafi Hudatama Wibowo"
+date: "11/20/2020"
+output: html_document
+---
+
+```{r}
+wh <- read.csv("D:/Universitas Islam Indonesia/SEMESTER 3/INFORMATIKA/Mata Kuliah/Fundamen Sains Data/K-means/Wholesale customers data.csv")
+summary(wh)
+```
+
+```{r}
+wh.new <- wh[, 3:8]
+wh.class <- wh[, "Region"]
+set.seed(1356)
+result <- kmeans(wh.new, 3)
+```
+
+```{r}
+par(mfrow=c(2,2), mar=c(5,4,2,2))
+plot(wh.new[, c(1,2)], col=result$cluster)
+plot(wh.new[, c(1,2)], col=wh.class)
+plot(wh.new[, c(3,4)], col=result$cluster)
+plot(wh.new[, c(3,4)], col=wh.class)
+```
+
+```{r}
+result$tot.withinss
+```
+
+```{r}
+attributes(result)$names
+```
+
+```{r}
+result$cluster
+```
+
+```{r}
+wh.new$cluster <- factor(result$cluster)
+centers <- as.data.frame(result$centers)
+library(ggplot2)
+ggplot() + 
+  geom_point(data=wh.new, aes(x=Fresh, y=Milk,color=cluster))  +
+  geom_point(data=centers, aes(x=Fresh, y=Milk, color="Center"), 
+             size=52, alpha=.3, show.legend = FALSE)
+```
